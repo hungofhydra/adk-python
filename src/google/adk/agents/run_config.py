@@ -34,32 +34,32 @@ logger = logging.getLogger('google_adk.' + __name__)
 
 
 class ToolThreadPoolConfig(BaseModel):
-  """Configuration for the tool thread pool executor.
+    """Configuration for the tool thread pool executor.
 
-  Attributes:
-    max_workers: Maximum number of worker threads in the pool. Defaults to 4.
-  """
+    Attributes:
+      max_workers: Maximum number of worker threads in the pool. Defaults to 4.
+    """
 
-  model_config = ConfigDict(
-      extra='forbid',
-  )
+    model_config = ConfigDict(
+        extra='forbid',
+    )
 
-  max_workers: int = Field(
-      default=4,
-      description='Maximum number of worker threads in the pool.',
-      ge=1,
-  )
+    max_workers: int = Field(
+        default=4,
+        description='Maximum number of worker threads in the pool.',
+        ge=1,
+    )
 
 
 class StreamingMode(Enum):
-  """Streaming modes for agent execution.
+    """Streaming modes for agent execution.
 
-  This enum defines different streaming behaviors for how the agent returns
-  events as model response.
-  """
+    This enum defines different streaming behaviors for how the agent returns
+    events as model response.
+    """
 
-  NONE = None
-  """Non-streaming mode (default).
+    NONE = None
+    """Non-streaming mode (default).
 
   In this mode:
   - The runner returns one single content in a turn (one user / model
@@ -78,8 +78,8 @@ class StreamingMode(Enum):
     ```
   """
 
-  SSE = 'sse'
-  """Server-Sent Events (SSE) streaming mode.
+    SSE = 'sse'
+    """Server-Sent Events (SSE) streaming mode.
 
   In this mode:
   - The runner yields events progressively as the LLM generates responses
@@ -170,8 +170,8 @@ class StreamingMode(Enum):
   - Event.is_final_response() for identifying final responses
   """
 
-  BIDI = 'bidi'
-  """Bidirectional streaming mode.
+    BIDI = 'bidi'
+    """Bidirectional streaming mode.
 
   So far this mode is not used in the standard execution path. The actual
   bidirectional streaming behavior via runner.run_live() uses a completely
@@ -182,37 +182,37 @@ class StreamingMode(Enum):
 
 
 class RunConfig(BaseModel):
-  """Configs for runtime behavior of agents.
+    """Configs for runtime behavior of agents.
 
-  The configs here will be overridden by agent-specific configurations.
-  """
+    The configs here will be overridden by agent-specific configurations.
+    """
 
-  model_config = ConfigDict(
-      extra='forbid',
-  )
-  """The pydantic model config."""
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    """The pydantic model config."""
 
-  speech_config: Optional[types.SpeechConfig] = None
-  """Speech configuration for the live agent."""
+    speech_config: Optional[types.SpeechConfig] = None
+    """Speech configuration for the live agent."""
 
-  response_modalities: Optional[list[str]] = None
-  """The output modalities. If not set, it's default to AUDIO."""
+    response_modalities: Optional[list[str]] = None
+    """The output modalities. If not set, it's default to AUDIO."""
 
-  avatar_config: Optional[types.AvatarConfig] = None
-  """Avatar configuration for the live agent."""
+    avatar_config: Optional[types.AvatarConfig] = None
+    """Avatar configuration for the live agent."""
 
-  save_input_blobs_as_artifacts: bool = Field(
-      default=False,
-      deprecated=True,
-      description=(
-          'Whether or not to save the input blobs as artifacts. DEPRECATED: Use'
-          ' SaveFilesAsArtifactsPlugin instead for better control and'
-          ' flexibility. See google.adk.plugins.SaveFilesAsArtifactsPlugin.'
-      ),
-  )
+    save_input_blobs_as_artifacts: bool = Field(
+        default=False,
+        deprecated=True,
+        description=(
+            'Whether or not to save the input blobs as artifacts. DEPRECATED: Use'
+            ' SaveFilesAsArtifactsPlugin instead for better control and'
+            ' flexibility. See google.adk.plugins.SaveFilesAsArtifactsPlugin.'
+        ),
+    )
 
-  support_cfc: bool = False
-  """
+    support_cfc: bool = False
+    """
   Whether to support CFC (Compositional Function Calling). Only applicable for
   StreamingMode.SSE. If it's true. the LIVE API will be invoked. Since only LIVE
   API supports CFC
@@ -222,41 +222,41 @@ class RunConfig(BaseModel):
       in future releases.
   """
 
-  streaming_mode: StreamingMode = StreamingMode.NONE
-  """Streaming mode, None or StreamingMode.SSE or StreamingMode.BIDI."""
+    streaming_mode: StreamingMode = StreamingMode.NONE
+    """Streaming mode, None or StreamingMode.SSE or StreamingMode.BIDI."""
 
-  output_audio_transcription: Optional[types.AudioTranscriptionConfig] = Field(
-      default_factory=types.AudioTranscriptionConfig
-  )
-  """Output transcription for live agents with audio response."""
+    output_audio_transcription: Optional[types.AudioTranscriptionConfig] = Field(
+        default_factory=types.AudioTranscriptionConfig
+    )
+    """Output transcription for live agents with audio response."""
 
-  input_audio_transcription: Optional[types.AudioTranscriptionConfig] = Field(
-      default_factory=types.AudioTranscriptionConfig
-  )
-  """Input transcription for live agents with audio input from user."""
+    input_audio_transcription: Optional[types.AudioTranscriptionConfig] = Field(
+        default_factory=types.AudioTranscriptionConfig
+    )
+    """Input transcription for live agents with audio input from user."""
 
-  realtime_input_config: Optional[types.RealtimeInputConfig] = None
-  """Realtime input config for live agents with audio input from user."""
+    realtime_input_config: Optional[types.RealtimeInputConfig] = None
+    """Realtime input config for live agents with audio input from user."""
 
-  enable_affective_dialog: Optional[bool] = None
-  """If enabled, the model will detect emotions and adapt its responses accordingly."""
+    enable_affective_dialog: Optional[bool] = None
+    """If enabled, the model will detect emotions and adapt its responses accordingly."""
 
-  proactivity: Optional[types.ProactivityConfig] = None
-  """Configures the proactivity of the model. This allows the model to respond proactively to the input and to ignore irrelevant input."""
+    proactivity: Optional[types.ProactivityConfig] = None
+    """Configures the proactivity of the model. This allows the model to respond proactively to the input and to ignore irrelevant input."""
 
-  session_resumption: Optional[types.SessionResumptionConfig] = None
-  """Configures session resumption mechanism. Only support transparent session resumption mode now."""
+    session_resumption: Optional[types.SessionResumptionConfig] = None
+    """Configures session resumption mechanism. Only support transparent session resumption mode now."""
 
-  context_window_compression: Optional[types.ContextWindowCompressionConfig] = (
-      None
-  )
-  """Configuration for context window compression. If set, this will enable context window compression for LLM input."""
+    context_window_compression: Optional[types.ContextWindowCompressionConfig] = (
+        None
+    )
+    """Configuration for context window compression. If set, this will enable context window compression for LLM input."""
 
-  save_live_blob: bool = False
-  """Saves live video and audio data to session and artifact service."""
+    save_live_blob: bool = False
+    """Saves live video and audio data to session and artifact service."""
 
-  tool_thread_pool_config: Optional[ToolThreadPoolConfig] = None
-  """Configuration for running tools in a thread pool for live mode.
+    tool_thread_pool_config: Optional[ToolThreadPoolConfig] = None
+    """Configuration for running tools in a thread pool for live mode.
 
   When set, tool executions will run in a separate thread pool executor
   instead of the main event loop. When None (default), tools run in the
@@ -302,17 +302,17 @@ class RunConfig(BaseModel):
     ```
   """
 
-  save_live_audio: bool = Field(
-      default=False,
-      deprecated=True,
-      description=(
-          'DEPRECATED: Use save_live_blob instead. If set to True, it saves'
-          ' live video and audio data to session and artifact service.'
-      ),
-  )
+    save_live_audio: bool = Field(
+        default=False,
+        deprecated=True,
+        description=(
+            'DEPRECATED: Use save_live_blob instead. If set to True, it saves'
+            ' live video and audio data to session and artifact service.'
+        ),
+    )
 
-  max_llm_calls: int = 500
-  """
+    max_llm_calls: int = 500
+    """
   A limit on the total number of llm calls for a given run.
 
   Valid Values:
@@ -321,11 +321,24 @@ class RunConfig(BaseModel):
     - Less than or equal to 0: This allows for unbounded number of llm calls.
   """
 
-  custom_metadata: Optional[dict[str, Any]] = None
-  """Custom metadata for the current invocation."""
+    dedupe_tool_calls: bool = True
+    """
+  Whether to deduplicate identical tool calls (same tool name + same arguments)
+  within a single invocation.
 
-  get_session_config: Optional[GetSessionConfig] = None
-  """Configuration for controlling which events are fetched when loading
+  This helps prevent redundant tool execution when the model repeats the same
+  function call multiple times (for example, when a tool is slow or the model
+  does not follow the instruction to call a tool only once).
+
+  Note: Only the tool result is reused; tool side effects (state/artifact
+  deltas) are only applied once from the first execution.
+  """
+
+    custom_metadata: Optional[dict[str, Any]] = None
+    """Custom metadata for the current invocation."""
+
+    get_session_config: Optional[GetSessionConfig] = None
+    """Configuration for controlling which events are fetched when loading
   a session.
 
   When set, the Runner will pass this configuration to the session service's
@@ -344,33 +357,34 @@ class RunConfig(BaseModel):
       )
   """
 
-  @model_validator(mode='before')
-  @classmethod
-  def check_for_deprecated_save_live_audio(cls, data: Any) -> Any:
-    """If save_live_audio is passed, use it to set save_live_blob."""
-    if isinstance(data, dict) and 'save_live_audio' in data:
-      warnings.warn(
-          'The `save_live_audio` config is deprecated and will be removed in a'
-          ' future release. Please use `save_live_blob` instead.',
-          DeprecationWarning,
-          stacklevel=2,
-      )
-      if data['save_live_audio']:
-        data['save_live_blob'] = True
-    return data
+    @model_validator(mode='before')
+    @classmethod
+    def check_for_deprecated_save_live_audio(cls, data: Any) -> Any:
+        """If save_live_audio is passed, use it to set save_live_blob."""
+        if isinstance(data, dict) and 'save_live_audio' in data:
+            warnings.warn(
+                'The `save_live_audio` config is deprecated and will be removed in a'
+                ' future release. Please use `save_live_blob` instead.',
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            if data['save_live_audio']:
+                data['save_live_blob'] = True
+        return data
 
-  @field_validator('max_llm_calls', mode='after')
-  @classmethod
-  def validate_max_llm_calls(cls, value: int) -> int:
-    if value == sys.maxsize:
-      raise ValueError(f'max_llm_calls should be less than {sys.maxsize}.')
-    elif value <= 0:
-      logger.warning(
-          'max_llm_calls is less than or equal to 0. This will result in'
-          ' no enforcement on total number of llm calls that will be made for a'
-          ' run. This may not be ideal, as this could result in a never'
-          ' ending communication between the model and the agent in certain'
-          ' cases.',
-      )
+    @field_validator('max_llm_calls', mode='after')
+    @classmethod
+    def validate_max_llm_calls(cls, value: int) -> int:
+        if value == sys.maxsize:
+            raise ValueError(
+                f'max_llm_calls should be less than {sys.maxsize}.')
+        elif value <= 0:
+            logger.warning(
+                'max_llm_calls is less than or equal to 0. This will result in'
+                ' no enforcement on total number of llm calls that will be made for a'
+                ' run. This may not be ideal, as this could result in a never'
+                ' ending communication between the model and the agent in certain'
+                ' cases.',
+            )
 
-    return value
+        return value
