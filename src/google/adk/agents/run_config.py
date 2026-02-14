@@ -321,7 +321,7 @@ class RunConfig(BaseModel):
     - Less than or equal to 0: This allows for unbounded number of llm calls.
   """
 
-  dedupe_tool_calls: bool = False
+  dedupe_tool_calls: bool = True
   """
   Whether to deduplicate identical tool calls (same tool name + same arguments)
   within a single invocation.
