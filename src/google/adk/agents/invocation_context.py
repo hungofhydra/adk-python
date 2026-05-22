@@ -332,6 +332,8 @@ class InvocationContext(BaseModel):
         self, *, tool_name: str, tool_args: dict[str, Any]
     ) -> tuple[Any, ...]:
         """Builds a cache key for a tool call within this invocation."""
+        if tool_name == "update_user_interaction":
+            return (self.branch, tool_name)
         return (
             self.branch,
             tool_name,
