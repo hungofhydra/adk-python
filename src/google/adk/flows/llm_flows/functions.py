@@ -604,6 +604,12 @@ async def _execute_single_function_call_async(
             if not function_response:
                 return None
 
+        # Suppress the response event for cache-hit repeats of
+        # update_user_interaction so the model isn't re-prompted with a stale
+        # "done" response and keeps looping.
+        if cache_hit and tool.name == 'update_user_interaction':
+            return None
+
         # Note: State deltas are not applied here - they are collected in
         # tool_context.actions.state_delta and applied later when the session
         # service processes the events
@@ -837,6 +843,12 @@ async def _execute_single_function_call_live(
             # The tool either runs long (FR will arrive later via session
             # injection) or defers its response by design.  Skip the auto-FR
             # build when the tool returned nothing.
+            return None
+
+        # Suppress the response event for cache-hit repeats of
+        # update_user_interaction so the model isn't re-prompted with a stale
+        # "done" response and keeps looping.
+        if cache_hit and tool.name == 'update_user_interaction':
             return None
 
         # Note: State deltas are not applied here - they are collected in
